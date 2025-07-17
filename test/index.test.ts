@@ -34,11 +34,11 @@ describe('chunkStream integration', () => {
     await chunkStream(input, options);
 
     const files = await fs.promises.readdir(TEST_DIR);
-    expect(files.sort()).toEqual(['simple_0.txt', 'simple_1.txt', 'simple_2.txt']);
+    expect(files.sort()).toEqual(['simple_0000.txt', 'simple_0001.txt', 'simple_0002.txt']);
 
-    const chunk0 = await fs.promises.readFile(path.join(TEST_DIR, 'simple_0.txt'), 'utf-8');
-    const chunk1 = await fs.promises.readFile(path.join(TEST_DIR, 'simple_1.txt'), 'utf-8');
-    const chunk2 = await fs.promises.readFile(path.join(TEST_DIR, 'simple_2.txt'), 'utf-8');
+    const chunk0 = await fs.promises.readFile(path.join(TEST_DIR, 'simple_0000.txt'), 'utf-8');
+    const chunk1 = await fs.promises.readFile(path.join(TEST_DIR, 'simple_0001.txt'), 'utf-8');
+    const chunk2 = await fs.promises.readFile(path.join(TEST_DIR, 'simple_0002.txt'), 'utf-8');
 
     expect(chunk0).toBe('hello world this');
     expect(chunk1).toBe('is a test');
@@ -61,11 +61,11 @@ describe('chunkStream integration', () => {
     await chunkStream(input, options);
 
     const files = await fs.promises.readdir(TEST_DIR);
-    expect(files.sort()).toEqual(['multiline_0.txt', 'multiline_1.txt', 'multiline_2.txt']);
+    expect(files.sort()).toEqual(['multiline_0000.txt', 'multiline_0001.txt', 'multiline_0002.txt']);
 
-    const chunk0 = await fs.promises.readFile(path.join(TEST_DIR, 'multiline_0.txt'), 'utf-8');
-    const chunk1 = await fs.promises.readFile(path.join(TEST_DIR, 'multiline_1.txt'), 'utf-8');
-    const chunk2 = await fs.promises.readFile(path.join(TEST_DIR, 'multiline_2.txt'), 'utf-8');
+    const chunk0 = await fs.promises.readFile(path.join(TEST_DIR, 'multiline_0000.txt'), 'utf-8');
+    const chunk1 = await fs.promises.readFile(path.join(TEST_DIR, 'multiline_0001.txt'), 'utf-8');
+    const chunk2 = await fs.promises.readFile(path.join(TEST_DIR, 'multiline_0002.txt'), 'utf-8');
 
     expect(chunk0).toBe('line one has words');
     expect(chunk1).toBe('line two has more');
@@ -86,7 +86,7 @@ describe('chunkStream integration', () => {
     await chunkStream(input, options);
 
     const files = await fs.promises.readdir(TEST_DIR);
-    expect(files.sort()).toEqual(['large_0.txt', 'large_1.txt', 'large_2.txt', 'large_3.txt']);
+    expect(files.sort()).toEqual(['large_0000.txt', 'large_0001.txt', 'large_0002.txt', 'large_0003.txt']);
 
     // Verify each chunk has the expected word count
     for (let i = 0; i < 4; i++) {
@@ -109,11 +109,11 @@ describe('chunkStream integration', () => {
     await chunkStream(input, options);
 
     const files = await fs.promises.readdir(TEST_DIR);
-    expect(files.sort()).toEqual(['fruits_0.txt', 'fruits_1.txt', 'fruits_2.txt']);
+    expect(files.sort()).toEqual(['fruits_0000.txt', 'fruits_0001.txt', 'fruits_0002.txt']);
 
-    const chunk0 = await fs.promises.readFile(path.join(TEST_DIR, 'fruits_0.txt'), 'utf-8');
-    const chunk1 = await fs.promises.readFile(path.join(TEST_DIR, 'fruits_1.txt'), 'utf-8');
-    const chunk2 = await fs.promises.readFile(path.join(TEST_DIR, 'fruits_2.txt'), 'utf-8');
+    const chunk0 = await fs.promises.readFile(path.join(TEST_DIR, 'fruits_0000.txt'), 'utf-8');
+    const chunk1 = await fs.promises.readFile(path.join(TEST_DIR, 'fruits_0001.txt'), 'utf-8');
+    const chunk2 = await fs.promises.readFile(path.join(TEST_DIR, 'fruits_0002.txt'), 'utf-8');
 
     expect(chunk0).toBe('apple banana');
     expect(chunk1).toBe('cherry date');

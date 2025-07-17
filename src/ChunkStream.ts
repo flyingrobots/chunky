@@ -70,7 +70,11 @@ export class ChunkStream {
     private rotateOutputStream(): void {
         if (this.outputStream) {
             if (this.onStreamClose) {
-                this.onStreamClose(this.filePath());
+                try {
+                    this.onStreamClose(this.filePath());
+                } catch (error) {
+                    // Ignore callback errors
+                }
             }
             this.outputStream.end();
             this.outputStream = null;
@@ -80,9 +84,10 @@ export class ChunkStream {
     }
 
     private filePath(): string {
+        const paddedNumber = this.chunkCount.toString().padStart(4, '0');
         return path.join(
             this.outputPath.toString(),
-            `${this.fileStem}_${this.chunkCount}${this.fileExt}`
+            `${this.fileStem}_${paddedNumber}${this.fileExt}`
         );
     }
 
@@ -107,7 +112,11 @@ export class ChunkStream {
 
             await this.openOutputStream();
             if (this.onStreamOpen) {
-                this.onStreamOpen(this.filePath());
+                try {
+                    this.onStreamOpen(this.filePath());
+                } catch (error) {
+                    // Ignore callback errors
+                }
             }
             this.outputStreamState = ChunkOutputStreamState.Open;
         }
@@ -119,20 +128,28 @@ export class ChunkStream {
         }
         
         if (this.onProgress) {
-            this.onProgress(this.wordCount);
+            try {
+                this.onProgress(this.wordCount);
+            } catch (error) {
+                // Ignore callback errors
+            }
         }
         
         if (this.wordCount % this.maxWordsPerChunk === 0) {
-            this.rotateOutputStream();
+            await this.rotateOutputStream();
         }
     }
 
-    public close(): void {
+    public async close(): Promise<void> {
         if (this.outputStreamState === ChunkOutputStreamState.Open) {
             this.outputStreamState = ChunkOutputStreamState.Closed;
             if (this.outputStream) {
                 if (this.onStreamClose) {
-                    this.onStreamClose(this.filePath());
+                    try {
+                        this.onStreamClose(this.filePath());
+                    } catch (error) {
+                        // Ignore callback errors
+                    }
                 }
                 this.outputStream.end();
                 this.outputStream = null;

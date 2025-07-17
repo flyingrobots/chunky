@@ -41,12 +41,12 @@ describe('ChunkStream', () => {
 
     // Check that files were created
     const files = await fs.promises.readdir(TEST_DIR);
-    expect(files.sort()).toEqual(['test_0.txt', 'test_1.txt', 'test_2.txt']);
+    expect(files.sort()).toEqual(['test_0000.txt', 'test_0001.txt', 'test_0002.txt']);
 
     // Check file contents
-    const chunk0 = await fs.promises.readFile(path.join(TEST_DIR, 'test_0.txt'), 'utf-8');
-    const chunk1 = await fs.promises.readFile(path.join(TEST_DIR, 'test_1.txt'), 'utf-8');
-    const chunk2 = await fs.promises.readFile(path.join(TEST_DIR, 'test_2.txt'), 'utf-8');
+    const chunk0 = await fs.promises.readFile(path.join(TEST_DIR, 'test_0000.txt'), 'utf-8');
+    const chunk1 = await fs.promises.readFile(path.join(TEST_DIR, 'test_0001.txt'), 'utf-8');
+    const chunk2 = await fs.promises.readFile(path.join(TEST_DIR, 'test_0002.txt'), 'utf-8');
 
     expect(chunk0).toBe('one two three');
     expect(chunk1).toBe('four five six');
@@ -78,8 +78,8 @@ describe('ChunkStream', () => {
     expect(onStreamClose).toHaveBeenCalledTimes(2);
     expect(onProgress).toHaveBeenCalledTimes(3);
 
-    expect(onStreamOpen).toHaveBeenNthCalledWith(1, path.join(TEST_DIR, 'callback_0.txt'));
-    expect(onStreamOpen).toHaveBeenNthCalledWith(2, path.join(TEST_DIR, 'callback_1.txt'));
+    expect(onStreamOpen).toHaveBeenNthCalledWith(1, path.join(TEST_DIR, 'callback_0000.txt'));
+    expect(onStreamOpen).toHaveBeenNthCalledWith(2, path.join(TEST_DIR, 'callback_0001.txt'));
   });
 
   it('should handle empty input gracefully', async () => {
@@ -109,7 +109,7 @@ describe('ChunkStream', () => {
     await chunkStream.close();
 
     const files = await fs.promises.readdir(deepDir);
-    expect(files).toContain('nested_0.txt');
+    expect(files).toContain('nested_0000.txt');
   });
 
   it('should handle single word per chunk', async () => {
@@ -127,11 +127,11 @@ describe('ChunkStream', () => {
     await chunkStream.close();
 
     const files = await fs.promises.readdir(TEST_DIR);
-    expect(files.sort()).toEqual(['single_0.txt', 'single_1.txt', 'single_2.txt']);
+    expect(files.sort()).toEqual(['single_0000.txt', 'single_0001.txt', 'single_0002.txt']);
 
-    const alpha = await fs.promises.readFile(path.join(TEST_DIR, 'single_0.txt'), 'utf-8');
-    const beta = await fs.promises.readFile(path.join(TEST_DIR, 'single_1.txt'), 'utf-8');
-    const gamma = await fs.promises.readFile(path.join(TEST_DIR, 'single_2.txt'), 'utf-8');
+    const alpha = await fs.promises.readFile(path.join(TEST_DIR, 'single_0000.txt'), 'utf-8');
+    const beta = await fs.promises.readFile(path.join(TEST_DIR, 'single_0001.txt'), 'utf-8');
+    const gamma = await fs.promises.readFile(path.join(TEST_DIR, 'single_0002.txt'), 'utf-8');
 
     expect(alpha).toBe('alpha');
     expect(beta).toBe('beta');
@@ -153,6 +153,6 @@ describe('ChunkStream', () => {
     await chunkStream.close();
 
     const files = await fs.promises.readdir(TEST_DIR);
-    expect(files).toEqual(['custom_0.md']);
+    expect(files).toEqual(['custom_0000.md']);
   });
 });
