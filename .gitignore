@@ -1,0 +1,53 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Node.js
+node_modules/
+dist/
+coverage/
+.env
+.env.local
+.env.production
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# IDEs
+.vscode/
+.idea/
+.obsidian/
+
+# Test artifacts
+test-chunks/
+test-integration-chunks/
+chunks/
+*.chunk.*
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# Build scripts
+scripts/*.log
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock

@@ -1,0 +1,35 @@
+{
+  "name": "chunky",
+  "version": "0.0.1",
+  "description": "A CLI tool for chunking files",
+  "keywords": [ "cli", "chunking", "files", "typescript" ],
+  "author": "J. Kirby Ross <james@flyingrobots.dev> (https://github.com/flyingrobots)",
+  "license": "MIND-UCLA-1.0",
+  "packageManager": "pnpm@10.12.4",
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "cli-progress": "^3.12.0",
+    "commander": "^14.0.0",
+    "fast-glob": "^3.3.3",
+    "ora": "^8.2.0",
+    "zod": "^4.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.14",
+    "@vitest/coverage-v8": "^3.2.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "chunky": "dist/cli/cli.js"
+  },
+  "scripts": {
+    "build": "bash scripts/build.sh",
+    "dev": "bash scripts/dev.sh",
+    "test": "bash scripts/test.sh",
+    "lint": "bash scripts/lint.sh"
+  }
+}
