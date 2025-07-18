@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["*"]
+      "@chunky": ["./src/index.ts"],
+      "@chunky/*": ["./src/*"]
     },
     "target": "ES2020",
     "module": "ESNext",
@@ -16,6 +17,6 @@
     "outDir": "dist",
     "sourceMap": true
   },
-  "include": ["src"],
+  "include": ["src", "cli"],
   "exclude": ["node_modules", "dist"]
 }

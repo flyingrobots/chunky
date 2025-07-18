@@ -5,6 +5,7 @@ import { finished } from 'node:stream';
 import { promisify } from 'node:util';
 import path from 'node:path';
 import fs from 'node:fs';
+import os from 'node:os';
 import { DEFAULTS } from './Defaults.js';
 import { OutputDirectoryError } from './errors.js';
 
@@ -133,8 +134,8 @@ export class ChunkStream extends Writable {
 
     private rotateOutputStream(): void {
         if (this.outputStream) {
-            // Write a newline to end the chunk cleanly
-            this.outputStream.write('\n');
+            // Write a newline to end the chunk cleanly (use OS-specific line ending)
+            this.outputStream.write(os.EOL);
             
             const streamToClose = this.outputStream;
             const closeFilePath = this.filePath();
@@ -299,8 +300,8 @@ export class ChunkStream extends Writable {
         if (this.outputStreamState === ChunkOutputStreamState.Open) {
             this.outputStreamState = ChunkOutputStreamState.Closed;
             if (this.outputStream) {
-                // Add newline when closing file
-                this.outputStream.write('\n');
+                // Add newline when closing file (use OS-specific line ending)
+                this.outputStream.write(os.EOL);
                 
                 const streamToClose = this.outputStream;
                 const closeFilePath = this.filePath();

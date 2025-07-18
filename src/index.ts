@@ -11,3 +11,11 @@ export async function chunkStream(
     await pipeline(stream, chunkStream);
 }
 
+// Re-export main classes and types
+export { ChunkStream } from "./ChunkStream.js";
+export { ChunkOptions, ChunkOptionsSchema, StreamStats } from "./ChunkOptions.js";
+export { ChunkOptionsBuilder } from "./ChunkOptionsBuilder.js";
+export { TokenizerStream, TokenizerOptions } from "./TokenizerStream.js";
+export { StatsTracker, ChunkingStats } from "./StatsTracker.js";
+export { FileStatsError, OutputDirectoryError } from "./errors.js";
+export { DEFAULTS } from "./Defaults.js";

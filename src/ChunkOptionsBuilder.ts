@@ -1,4 +1,4 @@
-import { ChunkOptions, ChunkOptionsSchema } from "./ChunkOptions";
+import { ChunkOptions, ChunkOptionsSchema, StreamStats } from "./ChunkOptions.js";
 
 export class ChunkOptionsBuilder {
     private options: ChunkOptions = {};
@@ -50,6 +50,11 @@ export class ChunkOptionsBuilder {
 
     onProgress(fn: (wordCount: number) => void): this {
         this.options.onProgress = fn;
+        return this;
+    }
+
+    onStats(fn: (stats: StreamStats) => void): this {
+        this.options.onStats = fn;
         return this;
     }
 

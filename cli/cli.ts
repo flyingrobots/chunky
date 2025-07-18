@@ -1,15 +1,13 @@
-#!/usr/bin/env node
-
 import { Command } from 'commander';
 import chalk from 'chalk';
 import ora from 'ora';
 import { SingleBar, Presets } from 'cli-progress';
 import fs from 'node:fs';
 import path from 'node:path';
-import { chunkStream } from './index.js';
-import { ChunkOptions } from './ChunkOptions.js';
-import { StatsTracker } from './StatsTracker.js';
-import { FileStatsError, OutputDirectoryError } from './errors.js';
+import { chunkStream } from '../src/index.js';
+import { ChunkOptions } from '../src/ChunkOptions.js';
+import { StatsTracker } from '../src/StatsTracker.js';
+import { FileStatsError, OutputDirectoryError } from '../src/errors.js';
 
 const statsTracker = new StatsTracker();
 
