@@ -86,8 +86,8 @@ await chunkStream(stream, {
 ## How It Works
 
 1. **Tokenization** - Input stream is tokenized using the delimiter pattern
-2. **Buffering** - Words are buffered until reaching the chunk size
-3. **File rotation** - New output files are created with zero-padded names
+2. **Immediate writing** - Words are written to output files as soon as they're tokenized (no buffering)
+3. **File rotation** - New output files are created when word count reaches chunk size
 4. **Async cleanup** - Streams are properly closed using promisified utilities
 5. **Memory tracking** - Stats callbacks report memory usage throughout
 
@@ -106,6 +106,7 @@ chunks/
 ## Performance
 
 - Processes files of any size without memory constraints
+- No word buffering - writes immediately to disk (crash-safe)
 - Handles backpressure automatically
 - Tracks high water mark for memory usage analysis
 - Cleans up promise arrays to prevent memory leaks
