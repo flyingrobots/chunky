@@ -1,155 +1,142 @@
 # 🔪 Chunky
 
-> A powerful CLI tool for splitting text files into word-based chunks
+A high-performance streaming text file chunker with proper async handling and memory efficiency.
 
-## What is Chunky?
+## Overview
 
-Chunky is a TypeScript CLI tool that processes text files and splits them into smaller chunks based on word count. Perfect for breaking large documents, logs, or datasets into manageable pieces for processing, analysis, or storage.
+Chunky splits large text files into smaller chunks based on word count using Node.js streams. It handles backpressure correctly, tracks memory usage, and provides detailed progress reporting.
 
 ## Features
 
-- **📊 Word-Based Chunking**: Split files by word count, not arbitrary byte sizes
-- **🎯 Smart Tokenization**: Configurable delimiters for different file types
-- **📁 Flexible Output**: Customize output directory, file names, and extensions
-- **⚡ Stream Processing**: Memory-efficient streaming for large files
-- **📈 Rich Progress**: Real-time progress bars and detailed statistics
-- **🔧 Developer-Friendly**: Clean TypeScript API with Zod validation
-- **🚀 High Performance**: Concurrent processing with proper error handling
+- **Stream-based processing** - Handles files of any size without loading into memory
+- **Proper async handling** - Uses promisified stream utilities for reliable operation  
+- **Memory tracking** - Monitor memory usage and high water marks during processing
+- **Zero-padded naming** - Chunks named with 4-digit zero padding (chunk_0001.txt)
+- **Progress reporting** - Real-time progress bars and statistics
+- **Error resilience** - Continues processing if file stats fail
+- **TypeScript** - Full type safety with Zod validation
 
 ## Installation
 
 ```bash
-# Install dependencies
+# Clone and install
+git clone https://github.com/flyingrobots/chunky.git
+cd chunky
 pnpm install
 
-# Build the project
+# Build everything including CLI
 pnpm run build
 
 # Run tests
-pnpm run test
+pnpm test
+```
+
+### Global CLI Installation
+
+```bash
+# After building, install globally
+pnpm link --global
+
+# Now use anywhere
+chunky large-file.txt --words 5000
 ```
 
 ## CLI Usage
 
 ```bash
-# Basic usage - chunk a file into 1000-word pieces
+# Basic usage - splits into 1000-word chunks
 chunky document.txt
 
-# Custom word count and output directory
-chunky document.txt --words 500 --out-dir ./output
+# Custom word count
+chunky document.txt --words 500
 
-# Multiple files with custom settings
-chunky file1.txt file2.txt --words 750 --stem "part" --ext ".md"
-
-# Custom delimiter for CSV files
-chunky data.csv --delimiter "," --words 100
+# Multiple files with options
+chunky *.txt --words 2000 --out-dir ./output --stem part
 
 # All options
 chunky input.txt \
-  --words 1000 \           # Words per chunk (default: 1000)
-  --out-dir ./chunks \     # Output directory (default: ./chunks)  
-  --stem chunk \           # File stem (default: chunk)
-  --ext .txt \             # File extension (default: .txt)
-  --delimiter "\\s+" \     # Word delimiter regex (default: \s+)
+  --words 1000 \       # Words per chunk
+  --out-dir ./chunks \ # Output directory
+  --stem chunk \       # File name prefix
+  --ext .txt \         # File extension
+  --delimiter "\\s+"   # Word delimiter regex
 ```
 
 ## API Usage
 
 ```typescript
-import { chunkStream } from './src/index.js';
-import { ChunkOptions } from './src/ChunkOptions.js';
+import { chunkStream } from 'chunky';
 import fs from 'node:fs';
 
-// Basic streaming API
+// Basic streaming
 const stream = fs.createReadStream('large-file.txt', { encoding: 'utf8' });
 await chunkStream(stream, {
   wordsPerChunk: 1000,
-  outDir: './output',
-  fileStem: 'chunk',
-  fileExt: '.txt'
+  outDir: './output'
 });
 
-// With callbacks for monitoring
+// With progress callbacks
 await chunkStream(stream, {
   wordsPerChunk: 500,
-  outDir: './chunks',
-  onStreamOpen: (path) => console.log(`Started chunk: ${path}`),
-  onStreamClose: (path) => console.log(`Completed chunk: ${path}`),
-  onProgress: (wordCount) => console.log(`Processed ${wordCount} words`)
-});
-
-// Custom delimiter for different file types
-await chunkStream(csvStream, {
-  delimiter: /,/,  // Split on commas for CSV
-  wordsPerChunk: 100,
-  fileExt: '.csv'
+  onProgress: (wordCount) => console.log(`${wordCount} words`),
+  onStats: (stats) => console.log(`Memory: ${stats.currentMemoryUsage}`)
 });
 ```
 
-## Options
+## How It Works
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `wordsPerChunk` | number | 1000 | Number of words per chunk |
-| `delimiter` | RegExp | `/\s+/` | Pattern to split words on |
-| `outDir` | string | `"./chunks"` | Output directory for chunks |
-| `fileStem` | string | `"chunk"` | Base name for chunk files |
-| `fileExt` | string | `".txt"` | File extension for chunks |
-| `encoding` | BufferEncoding | `"utf8"` | Text encoding |
-| `onStreamOpen` | function | - | Callback when chunk file opens |
-| `onStreamClose` | function | - | Callback when chunk file closes |
-| `onProgress` | function | - | Callback for progress updates |
+1. **Tokenization** - Input stream is tokenized using the delimiter pattern
+2. **Buffering** - Words are buffered until reaching the chunk size
+3. **File rotation** - New output files are created with zero-padded names
+4. **Async cleanup** - Streams are properly closed using promisified utilities
+5. **Memory tracking** - Stats callbacks report memory usage throughout
 
-## Output
+## Output Format
 
-Chunky creates numbered files in the specified output directory:
+Files are created with zero-padded sequential numbering:
 
 ```
 chunks/
-├── chunk_0.txt    # First 1000 words
-├── chunk_1.txt    # Next 1000 words  
-├── chunk_2.txt    # Next 1000 words
-└── chunk_3.txt    # Remaining words
+├── chunk_0001.txt    # First chunk
+├── chunk_0002.txt    # Second chunk
+├── chunk_0003.txt    # Third chunk
+└── chunk_0004.txt    # Fourth chunk
 ```
 
-## Use Cases
+## Performance
 
-- **Large Document Processing**: Split books, articles, or reports for analysis
-- **Log File Analysis**: Break log files into time-based or size-based chunks
-- **Data Pipeline**: Prepare large datasets for batch processing
-- **Content Management**: Divide content for pagination or storage limits
-- **NLP Preprocessing**: Create training data chunks for machine learning
+- Processes files of any size without memory constraints
+- Handles backpressure automatically
+- Tracks high water mark for memory usage analysis
+- Cleans up promise arrays to prevent memory leaks
 
 ## Development
 
 ```bash
-# Run in development mode
-pnpm run dev
+# Run tests
+pnpm test
 
-# Run linting
-pnpm run lint
+# Run with coverage
+pnpm test:coverage
 
-# Build for production
-pnpm run build
+# Lint code
+pnpm lint
 
-# Run specific tests
-pnpm test -- ChunkStream
+# Build project
+pnpm build
+
+# Build CLI only
+pnpm build:cli
 ```
 
-## Contributing
+## Architecture
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feat/amazing-feature`)
-3. Make your changes with tests
-4. Run the test suite (`pnpm test`)
-5. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-6. Push to the branch (`git push origin feat/amazing-feature`)
-7. Open a Pull Request
+- `ChunkStream` - Main transform stream handling the chunking logic
+- `WordTokenizer` - Transform stream that tokenizes input by delimiter
+- `StatsTracker` - Tracks processing statistics across files
+- Proper async/await with `promisify(finished)` for stream completion
+- Memory-efficient promise array cleanup
 
 ## License
 
 MIND-UCLA-1.0
-
----
-
-*Built with TypeScript, tested with Vitest, and validated with Zod. 🔪*
