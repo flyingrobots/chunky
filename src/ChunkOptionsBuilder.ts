@@ -13,6 +13,11 @@ export class ChunkOptionsBuilder {
         return this;
     }
 
+    outputDelimiter(delim: string): this {
+        this.options.outputDelimiter = delim;
+        return this;
+    }
+
     outDir(dir: string): this {
         this.options.outDir = dir;
         return this;
